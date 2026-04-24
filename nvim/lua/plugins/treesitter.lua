@@ -14,6 +14,13 @@ return {
         "css",
         "java",
         "json",
+        "tsx", 
+        "python", 
+        "go", 
+        "c_sharp",
+        "c",
+        "cpp",
+        "rust",
     }
   end,
 }

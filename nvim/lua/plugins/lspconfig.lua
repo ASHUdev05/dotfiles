@@ -15,6 +15,12 @@ return {
                 "html",
                 "cssls",
                 "jdtls",
+                "pyright", 
+                "gopls", 
+                "omnisharp", 
+                "eslint",
+                "clangd",
+                "rust_analyzer"
             },
         })
 
@@ -44,6 +50,8 @@ return {
             "html",
             "cssls",
             "jdtls",
+            "clangd",
+            "rust_analyzer"
         }) do
             vim.lsp.enable(server)
         end
