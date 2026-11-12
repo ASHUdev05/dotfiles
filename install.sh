@@ -35,27 +35,36 @@ if [ -f "$DOTFILES_DIR/Brewfile" ]; then
     brew bundle --file="$DOTFILES_DIR/Brewfile"
 fi
 
-# 4. Helper function to backup existing files and create symlinks
-link_file() {
-    local src="$1"
-    local dest="$2"
+# 4. Append dotfiles loader to existing ~/.bashrc (idempotent)
+touch "$HOME/.bashrc"
+MARKER="# >>> ASHUdev05 dotfiles >>>"
 
-    if [ -e "$dest" ] && [ ! -L "$dest" ]; then
-        mkdir -p "$BACKUP_DIR"
-        echo "📁 Backing up existing $dest ->$BACKUP_DIR/"
-        mv "$dest" "$BACKUP_DIR/"
-    fi
+if ! grep -qF "$MARKER" "$HOME/.bashrc"; then
+    cat << 'EOF' >> "$HOME/.bashrc"
 
-    mkdir -p "$(dirname "$dest")"
-    ln -sf "$src" "$dest"
-    echo "🔗 Linked $dest ->$src"
-}
+# >>> ASHUdev05 dotfiles >>>
+export DOTFILES="$HOME/dotfiles"
+for file in "$DOTFILES/bash/"*.bash; do
+    [ -r "$file" ] && source "$file"
+done
+# <<< ASHUdev05 dotfiles <<<
+EOF
+    echo "🔗 Added dotfiles source block to ~/.bashrc"
+else
+    echo "✔️ Dotfiles source block already present in ~/.bashrc"
+fi
 
-# Link configurations
-link_file "$DOTFILES_DIR/bash/bashrc" "$HOME/.bashrc"
-link_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
+# 5. Link Neovim config (with backup if real directory exists)
+if [ -e "$HOME/.config/nvim" ] && [ ! -L "$HOME/.config/nvim" ]; then
+    mkdir -p "$BACKUP_DIR"
+    mv "$HOME/.config/nvim" "$BACKUP_DIR/"
+    echo "📁 Backed up existing nvim config to $BACKUP_DIR/"
+fi
+mkdir -p "$HOME/.config"
+ln -sf "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
+echo "🔗 Linked ~/.config/nvim -> $DOTFILES_DIR/nvim"
 
-# 5. Headless Neovim plugin sync via lazy.nvim
+# 6. Headless Neovim plugin sync via lazy.nvim
 if command -v nvim >/dev/null 2>&1; then
     echo "🔌 Syncing Neovim plugins..."
     nvim --headless "+Lazy! restore" +qa

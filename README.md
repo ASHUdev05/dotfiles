@@ -12,7 +12,6 @@ text
 dotfiles/
 ├── bash/
 │   ├── aliases.bash   # Safe, guarded custom aliases (eza, bat, git, apt)
-│   ├── bashrc         # Master entrypoint sourcing modular files
 │   ├── env.bash       # Environment paths (Cargo, Go, NVM, local bin)
 │   └── plugins.bash   # Tool initializations (Homebrew, Zoxide)
 ├── nvim/              # Modular Neovim configuration (lazy.nvim plugins)
