@@ -35,7 +35,7 @@ if [ -f "$DOTFILES_DIR/Brewfile" ]; then
     brew bundle --file="$DOTFILES_DIR/Brewfile"
 fi
 
-# 4. Append dotfiles loader to existing ~/.bashrc (idempotent)
+# 4. Append Homebrew + dotfiles loader to existing ~/.bashrc (idempotent)
 touch "$HOME/.bashrc"
 MARKER="# >>> ASHUdev05 dotfiles >>>"
 
@@ -43,13 +43,19 @@ if ! grep -qF "$MARKER" "$HOME/.bashrc"; then
     cat << 'EOF' >> "$HOME/.bashrc"
 
 # >>> ASHUdev05 dotfiles >>>
+if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
+elif [ -x "$HOME/.linuxbrew/bin/brew" ]; then
+    eval "$($HOME/.linuxbrew/bin/brew shellenv bash)"
+fi
+
 export DOTFILES="$HOME/dotfiles"
 for file in "$DOTFILES/bash/"*.bash; do
     [ -r "$file" ] && source "$file"
 done
 # <<< ASHUdev05 dotfiles <<<
 EOF
-    echo "🔗 Added dotfiles source block to ~/.bashrc"
+    echo "🔗 Added Homebrew & dotfiles source block to ~/.bashrc"
 else
     echo "✔️ Dotfiles source block already present in ~/.bashrc"
 fi
