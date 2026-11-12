@@ -1,7 +1,3 @@
-Here is a cleaned-up and properly formatted `README.md` with consistent Markdown headings, code blocks, lists, and corrected command formatting.
-
-Writing
-
 # 🚀 My Dotfiles Ecosystem
 
 A clean, modular, and automated setup for my terminal (**Bash**) and editor (**Neovim**), designed to bootstrap seamlessly on any fresh Linux or macOS machine with a single command.
