@@ -1,0 +1,6 @@
+brew "eza"
+brew "bat"
+brew "zoxide"
+brew "fzf"
+brew "ripgrep"
+brew "neovim"

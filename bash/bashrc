@@ -1,0 +1,19 @@
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# Load system bash completion
+if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+fi
+
+export DOTFILES="$HOME/dotfiles"
+
+# Source all modular bash configurations
+for file in "$DOTFILES/bash/"*.bash; do
+    [ -r "$file" ] && source "$file"
+done
+
+# Machine-specific overrides (untracked local config)
+[ -f "$HOME/.bashrc.local" ] && source "$HOME/.bashrc.local"
